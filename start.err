@@ -1,0 +1,448 @@
+Failed to proxy http://127.0.0.1:8080/api/recommendations/today Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/history?days=30 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/model/status Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/today Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/history?days=30 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/model/status Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/today Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/history?days=30 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/model/status Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/today Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/history?days=30 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/model/status Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/today Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/history?days=30 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/model/status Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/today Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/history?days=30 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/model/status Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/today Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/history?days=30 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/model/status Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/today Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/history?days=30 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/model/status Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/today Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/recommendations/history?days=30 Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/model/status Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Failed to proxy http://127.0.0.1:8080/api/run-analysis Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8080) {
+  errno: -4078,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 8080
+}
