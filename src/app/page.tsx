@@ -1,9 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import HistoryCharts from "@/components/HistoryCharts";
+import AccountBar from "@/components/AccountBar";
+import SiteLogo from "@/components/SiteLogo";
+import { LockedBadge, LockedPanel } from "@/components/Locked";
+import { useAuth } from "@/components/AuthProvider";
 import {
+  ApiError,
   fetchHistory,
   fetchModelStatus,
   fetchToday,
@@ -67,6 +73,13 @@ function fmtDate(iso: string): string {
     day: "numeric",
     year: "numeric",
   });
+}
+
+function localDateISO(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 function pctClass(v: number | null | undefined): string {
@@ -143,9 +156,11 @@ function EvalStrip({ evaluation }: { evaluation: Evaluation | null }) {
 function ModelChip({
   model,
   apiOffline,
+  showMetrics,
 }: {
   model: ModelInfo | null;
   apiOffline: boolean;
+  showMetrics: boolean;
 }) {
   if (apiOffline) {
     return (
@@ -168,17 +183,24 @@ function ModelChip({
         model {model.version}
       </span>
       <span>trained {model.trained_at?.slice(0, 10)}</span>
-      {holdout?.spearman !== undefined && (
+      {showMetrics && holdout?.spearman !== undefined && (
         <span className="hidden sm:inline">
           holdout rank-corr ρ={holdout.spearman.toFixed(3)} · R²=
           {holdout.r2?.toFixed(3)}
         </span>
       )}
+      {!showMetrics && <LockedBadge feature="model_metrics" />}
     </div>
   );
 }
 
-function TodayTable({ items }: { items: Recommendation[] }) {
+function TodayTable({
+  items,
+  showRationale,
+}: {
+  items: Recommendation[];
+  showRationale: boolean;
+}) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
       <table className="w-full min-w-[860px] text-left text-sm">
@@ -226,9 +248,18 @@ function TodayTable({ items }: { items: Recommendation[] }) {
               </td>
               <td className="max-w-[340px] px-4 py-3 text-xs leading-relaxed text-slate-500">
                 {rec.rationale}
+                {rec.rationale_locked && (
+                  <span className="ml-1 inline-block" title="Upgrade for full rationale">
+                    🔒
+                  </span>
+                )}
               </td>
               <td className="px-4 py-3">
-                <FeatureChips features={rec.key_features} />
+                {showRationale ? (
+                  <FeatureChips features={rec.key_features} />
+                ) : (
+                  <LockedBadge feature="full_rationale" />
+                )}
               </td>
             </tr>
           ))}
@@ -365,7 +396,15 @@ function NewsCard({ item }: { item: NewsScanItem }) {
   );
 }
 
-function HistoryList({ history }: { history: HistoryResponse }) {
+function HistoryList({
+  history,
+  canGraphs,
+  showRationale,
+}: {
+  history: HistoryResponse;
+  canGraphs: boolean;
+  showRationale: boolean;
+}) {
   const [view, setView] = useState<"cards" | "graphs">("cards");
 
   if (history.history.length === 0) {
@@ -394,14 +433,16 @@ function HistoryList({ history }: { history: HistoryResponse }) {
             Cards
           </button>
           <button
-            onClick={() => setView("graphs")}
+            onClick={() => canGraphs && setView("graphs")}
+            disabled={!canGraphs}
+            title={canGraphs ? undefined : "Upgrade to unlock performance graphs"}
             className={`rounded-lg px-4 py-1.5 transition ${
               view === "graphs"
                 ? "bg-slate-900 text-white"
                 : "text-slate-500 hover:text-slate-800"
-            }`}
+            } ${canGraphs ? "" : "cursor-not-allowed opacity-40"}`}
           >
-            Graphs
+            Graphs{!canGraphs ? " 🔒" : ""}
           </button>
         </div>
       </div>
@@ -473,7 +514,13 @@ function HistoryList({ history }: { history: HistoryResponse }) {
                 </div>
                 <p className="mt-2 line-clamp-2 text-[11px] leading-relaxed text-slate-500">
                   {rec.rationale}
+                  {rec.rationale_locked ? " 🔒" : ""}
                 </p>
+                {showRationale && Object.keys(rec.key_features).length > 0 && (
+                  <div className="mt-2">
+                    <FeatureChips features={rec.key_features} />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -485,6 +532,7 @@ function HistoryList({ history }: { history: HistoryResponse }) {
 }
 
 export default function Home() {
+  const { can, plans, featureLabels, ready: authReady, user, isAdmin } = useAuth();
   const [tab, setTab] = useState<"today" | "history">("today");
   const [today, setToday] = useState<TodayResponse | null>(null);
   const [history, setHistory] = useState<HistoryResponse | null>(null);
@@ -499,6 +547,11 @@ export default function Home() {
   const newsSectionRef = useRef<HTMLElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [todayLabel, setTodayLabel] = useState<string>("");
+
+  useEffect(() => {
+    setTodayLabel(fmtDate(localDateISO(new Date())));
+  }, []);
 
   const loadAll = useCallback(async () => {
     setError(null);
@@ -542,7 +595,7 @@ export default function Home() {
       await loadAll();
       setTab("today");
     } catch (e) {
-      setError((e as Error).message);
+      setError(describeError(e));
     } finally {
       setRunning(false);
     }
@@ -557,11 +610,27 @@ export default function Home() {
         newsSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     } catch (e) {
-      setNewsError((e as Error).message);
+      setNewsError(describeError(e));
     } finally {
       setNewsScanning(false);
     }
   };
+
+  function describeError(e: unknown): string {
+    if (e instanceof ApiError && e.upgradeRequired) {
+      return `${e.message} Ask an administrator to upgrade your subscription.`;
+    }
+    return e instanceof Error ? e.message : "Something went wrong.";
+  }
+
+  const showRationale = can("full_rationale");
+  const allowToday = can("today_picks");
+  const allowHistory = can("history");
+  const allowLookup = can("stock_lookup");
+
+  useEffect(() => {
+    if (tab === "history" && !allowHistory) setTab("today");
+  }, [tab, allowHistory]);
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
@@ -576,31 +645,31 @@ export default function Home() {
         />
       </div>
 
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <Image
-              src="/logo.png"
-              alt="IstikStocks"
-              width={1024}
-              height={1024}
-              className="h-[120px] w-[120px] rounded-2xl"
-            />
-          </div>
-          <p className="mt-1 text-sm text-slate-600">
+      <header className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+        <div className="min-w-0">
+          <SiteLogo size="lg" priority />
+          <p className="mt-2 max-w-xl text-sm text-slate-600">
             Predictive ranking of real US penny stocks (NASDAQ / NYSE / NYSE
-            American) — learned from 3 years of daily history and the macro
+            American) - learned from 3 years of daily history and the macro
             regimes they thrive in.
           </p>
         </div>
-        <ModelChip model={model} apiOffline={apiOffline} />
+        <div className="flex flex-col items-end gap-2.5">
+          <AccountBar />
+          <ModelChip
+            model={model}
+            apiOffline={apiOffline}
+            showMetrics={can("model_metrics")}
+          />
+        </div>
       </header>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <button
           onClick={handleRun}
-          disabled={running}
-          className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={running || !can("daily_analysis")}
+          title={can("daily_analysis") ? undefined : "Upgrade to run the daily analysis"}
+          className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40"
         >
           {running ? (
             <>
@@ -608,14 +677,15 @@ export default function Home() {
               Running analysis…
             </>
           ) : (
-            <>▶ Run Daily Analysis</>
+            <>▶ Run Daily Analysis{can("daily_analysis") ? "" : " 🔒"}</>
           )}
         </button>
 
         <button
           onClick={handleNewsScan}
-          disabled={running || newsScanning}
-          className="inline-flex items-center gap-2 rounded-xl bg-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={running || newsScanning || !can("news_surge")}
+          title={can("news_surge") ? undefined : "Upgrade to run the news surge scan"}
+          className="inline-flex items-center gap-2 rounded-xl bg-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-40"
         >
           {newsScanning ? (
             <>
@@ -623,25 +693,49 @@ export default function Home() {
               Scanning news…
             </>
           ) : (
-            <>⚡ News Surge Scan</>
+            <>⚡ News Surge Scan{can("news_surge") ? "" : " 🔒"}</>
           )}
         </button>
 
         <nav className="flex rounded-xl border border-slate-200 bg-white p-1 text-sm shadow-sm">
-          {(["today", "history"] as const).map((key) => (
+          {(
+            [
+              ["today", "Today’s picks", allowToday],
+              ["history", "History", allowHistory],
+            ] as const
+          ).map(([key, label, allowed]) => (
             <button
               key={key}
-              onClick={() => setTab(key)}
+              onClick={() => allowed && setTab(key)}
+              disabled={!allowed}
+              title={allowed ? undefined : "Upgrade to unlock"}
               className={`rounded-lg px-4 py-1.5 capitalize transition ${
                 tab === key
                   ? "bg-slate-900 text-white"
                   : "text-slate-500 hover:text-slate-800"
-              }`}
+              } ${allowed ? "" : "cursor-not-allowed opacity-40"}`}
             >
-              {key === "today" ? "Today’s picks" : "History"}
+              {label}
+              {allowed ? "" : " 🔒"}
             </button>
           ))}
         </nav>
+
+        {allowLookup ? (
+          <Link
+            href="/stock"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-400 hover:bg-slate-50"
+          >
+            🔍 Look Up a Stock
+          </Link>
+        ) : (
+          <span
+            className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-400 opacity-50 shadow-sm"
+            title="Upgrade to run Look Up a Stock"
+          >
+            🔍 Look Up a Stock 🔒
+          </span>
+        )}
 
         {running && (
           <span className="text-xs text-slate-500">
@@ -688,22 +782,33 @@ export default function Home() {
       )}
 
       <section className="mt-6">
-        {loading ? (
+        {!authReady ? (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-white/70 p-16 text-center text-slate-500">
             Loading…
           </div>
         ) : tab === "today" ? (
-          today && today.items.length > 0 ? (
+          !allowToday ? (
+            <LockedPanel feature="today_picks" />
+          ) : loading ? (
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white/70 p-16 text-center text-slate-500">
+              Loading…
+            </div>
+          ) : today && today.items.length > 0 ? (
             <>
-              <div className="mb-3 flex items-baseline justify-between">
-                <h2 className="text-lg font-semibold text-slate-900">
-                  Top 5 for {fmtDate(today.date)}
-                </h2>
+              <div className="mb-3 flex items-baseline justify-between gap-3">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900">
+                    Top 5 for {todayLabel || fmtDate(today.date)}
+                  </h2>
+                  <p className="text-[11px] text-slate-400">
+                    picks as of {fmtDate(today.date)}
+                  </p>
+                </div>
                 <span className="font-mono text-xs text-slate-500">
                   {today.model_version}
                 </span>
               </div>
-              <TodayTable items={today.items} />
+              <TodayTable items={today.items} showRationale={showRationale} />
             </>
           ) : (
             <div className="rounded-2xl border border-dashed border-slate-300 bg-white/70 p-16 text-center text-slate-500">
@@ -714,8 +819,14 @@ export default function Home() {
               to generate today’s top 5.
             </div>
           )
+        ) : !allowHistory ? (
+          <LockedPanel feature="history" />
         ) : history ? (
-          <HistoryList history={history} />
+          <HistoryList
+            history={history}
+            canGraphs={can("history_graphs")}
+            showRationale={showRationale}
+          />
         ) : (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-white/70 p-16 text-center text-slate-500">
             History unavailable.
@@ -765,6 +876,107 @@ export default function Home() {
           financial advice. Penny stocks are highly volatile and illiquid.
         </p>
       </footer>
+
+      <section id="plans" className="mt-10 scroll-mt-8">
+        <h2 className="text-lg font-semibold text-slate-900">Subscriptions</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          {user
+            ? isAdmin
+              ? "Administrators have access to every plan."
+              : "Select a plan to check out. You can pay monthly or annually."
+            : "Guests and new accounts use the default plan. Sign in to change plan."}
+        </p>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          {plans.map((plan) => {
+            const current = user?.subscription_id === plan.id;
+            const canBuy = Boolean(user) && !isAdmin && !current;
+
+            const inner = (
+              <>
+                <div className="flex items-baseline justify-between">
+                  <h3 className="text-base font-semibold text-slate-900">
+                    {plan.name}
+                  </h3>
+                  <span className="font-mono text-lg font-bold text-slate-900">
+                    ${plan.price}
+                    <span className="text-[11px] font-normal text-slate-400">
+                      /{plan.billing_period}
+                    </span>
+                  </span>
+                </div>
+                {plan.annual_savings > 0 && (
+                  <p className="mt-1 text-[11px] font-medium text-emerald-700">
+                    or ${plan.annual_price_effective}/year — save $
+                    {plan.annual_savings}
+                  </p>
+                )}
+                <p className="mt-1 min-h-[32px] text-xs text-slate-500">
+                  {plan.description}
+                </p>
+                <ul className="mt-3 flex-1 space-y-1.5">
+                  {Object.entries(featureLabels).map(([key, label]) => {
+                    const on = (plan.features as string[]).includes(key);
+                    return (
+                      <li
+                        key={key}
+                        className={`flex items-start gap-2 text-xs ${
+                          on ? "text-slate-700" : "text-slate-300 line-through"
+                        }`}
+                      >
+                        <span>{on ? "✓" : "✕"}</span>
+                        {label}
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="mt-4 text-[11px] font-semibold">
+                  {current ? (
+                    <span className="text-emerald-700">Your current plan</span>
+                  ) : canBuy ? (
+                    <span className="text-sky-700">Choose {plan.name} →</span>
+                  ) : isAdmin ? (
+                    <span className="text-slate-400">Included for admins</span>
+                  ) : (
+                    <Link
+                      href="/register"
+                      className="text-sky-700 underline-offset-2 hover:underline"
+                    >
+                      Create an account →
+                    </Link>
+                  )}
+                </div>
+              </>
+            );
+
+            const shell = `flex h-full flex-col rounded-2xl border p-5 shadow-sm transition ${
+              current
+                ? "border-emerald-400 bg-emerald-50/50"
+                : canBuy
+                ? "border-slate-200 bg-white hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-md"
+                : "border-slate-200 bg-white"
+            }`;
+
+            if (!canBuy) {
+              return (
+                <div key={plan.id} className={shell}>
+                  {inner}
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={plan.id}
+                href={`/checkout/${plan.slug}`}
+                className={`${shell} focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2`}
+              >
+                {inner}
+              </Link>
+            );
+          })}
+        </div>
+      </section>
     </main>
   );
 }
