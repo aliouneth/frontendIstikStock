@@ -241,6 +241,24 @@ export default function StockLookupPage() {
   const searchBoxRef = useRef<HTMLDivElement>(null);
   const allow = can("stock_lookup");
 
+  // Deep link from a watchlist row: /stock?t=CAN evaluates straight away.
+  useEffect(() => {
+    const preset = new URLSearchParams(window.location.search).get("t");
+    if (preset && allow) {
+      const t = preset.toUpperCase();
+      setQuery(t);
+      void pick({
+        ticker: t,
+        name: null,
+        sector: null,
+        exchange: null,
+        last_price: null,
+      });
+    }
+    // Intentionally runs only on mount / when access changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allow]);
+
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
       if (!searchBoxRef.current?.contains(e.target as Node)) setOpen(false);

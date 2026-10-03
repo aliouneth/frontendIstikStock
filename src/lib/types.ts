@@ -150,7 +150,44 @@ export type FeatureKey =
   | "history_graphs"
   | "model_metrics"
   | "full_rationale"
-  | "stock_lookup";
+  | "stock_lookup"
+  | "watchlists";
+
+export interface WatchlistSummary {
+  id: number;
+  name: string;
+  items_count: number;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface WatchlistItem {
+  id: number;
+  ticker: string;
+  name: string | null;
+  sector: string | null;
+  exchange: string | null;
+  last_price: number | null;
+  evaluation: (StockEvaluation & { price_history?: StockPricePoint[] }) | null;
+  price_history: StockPricePoint[];
+}
+
+export interface WatchlistDetail extends WatchlistSummary {
+  items: WatchlistItem[];
+}
+
+export interface WatchlistsResponse {
+  watchlists: WatchlistSummary[];
+}
+
+export interface WatchlistResponse {
+  watchlist: WatchlistSummary;
+}
+
+export interface WatchlistDetailResponse {
+  watchlist: WatchlistSummary;
+  items: WatchlistItem[];
+}
 
 export interface StockSearchResult {
   ticker: string;

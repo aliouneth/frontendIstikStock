@@ -12,6 +12,9 @@ import type {
   RunAnalysisResponse,
   StockEvaluationResponse,
   StockSearchResult,
+  WatchlistDetailResponse,
+  WatchlistResponse,
+  WatchlistsResponse,
   SubscriptionsResponse,
   Subscription,
   TodayResponse,
@@ -114,6 +117,54 @@ export function evaluateStock(
   ticker: string
 ): Promise<StockEvaluationResponse> {
   return request(`/api/stocks/${encodeURIComponent(ticker)}/evaluation`);
+}
+
+/* ------------------------------ watchlists ------------------------------ */
+
+export function fetchWatchlists(): Promise<WatchlistsResponse> {
+  return request<WatchlistsResponse>("/api/watchlists");
+}
+
+export function createWatchlist(name: string): Promise<WatchlistResponse> {
+  return request<WatchlistResponse>("/api/watchlists", {
+    method: "POST",
+    body: JSON.stringify({ name }),
+  });
+}
+
+export function renameWatchlist(
+  id: number,
+  name: string
+): Promise<WatchlistResponse> {
+  return request<WatchlistResponse>(`/api/watchlists/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ name }),
+  });
+}
+
+export function deleteWatchlist(id: number): Promise<{ message: string }> {
+  return request(`/api/watchlists/${id}`, { method: "DELETE" });
+}
+
+export function fetchWatchlist(id: number): Promise<WatchlistDetailResponse> {
+  return request<WatchlistDetailResponse>(`/api/watchlists/${id}`);
+}
+
+export function addWatchlistItem(
+  id: number,
+  ticker: string
+): Promise<{ item: { id: number; ticker: string } }> {
+  return request(`/api/watchlists/${id}/items`, {
+    method: "POST",
+    body: JSON.stringify({ ticker }),
+  });
+}
+
+export function removeWatchlistItem(
+  id: number,
+  itemId: number
+): Promise<{ message: string }> {
+  return request(`/api/watchlists/${id}/items/${itemId}`, { method: "DELETE" });
 }
 
 /* ------------------------- accounts & access ------------------------- */

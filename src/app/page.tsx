@@ -172,7 +172,7 @@ function ModelChip({
   if (!model?.trained) {
     return (
       <span className="rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs text-amber-700">
-        Model not trained
+        Model being trained
       </span>
     );
   }
@@ -381,6 +381,11 @@ function NewsCard({ item }: { item: NewsScanItem }) {
                     {h.title}
                   </span>
                   <span className="text-[10px] text-slate-400">
+                    {h.age_hours < 24 && (
+                      <span className="mr-1.5 rounded bg-emerald-100 px-1 py-px font-semibold text-emerald-700">
+                        today
+                      </span>
+                    )}
                     {h.publisher || "wire"} · {fmtAge(h.age_hours)} ago
                     {SIGNAL_LABEL[h.signal]
                       ? ` · ${SIGNAL_LABEL[h.signal]}`
@@ -734,6 +739,22 @@ export default function Home() {
             title="Upgrade to run Look Up a Stock"
           >
             🔍 Look Up a Stock 🔒
+          </span>
+        )}
+
+        {can("watchlists") ? (
+          <Link
+            href="/watchlists"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-400 hover:bg-slate-50"
+          >
+            ⭐ My Watchlists
+          </Link>
+        ) : (
+          <span
+            className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-400 opacity-50 shadow-sm"
+            title="Upgrade to use watchlists"
+          >
+            ⭐ My Watchlists 🔒
           </span>
         )}
 
