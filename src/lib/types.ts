@@ -373,6 +373,54 @@ export interface SubscriptionsResponse {
   available_features: Record<string, string>;
 }
 
+export interface AdminPlanStat {
+  id: number;
+  name: string;
+  slug: string;
+  price: number;
+  users: number;
+}
+
+export interface AdminStats {
+  generated_at: string;
+  users: {
+    total: number;
+    active: number;
+    inactive: number;
+    admins: number;
+    new_today: number;
+    new_7d: number;
+    new_30d: number;
+    seen_7d: number;
+    never_signed_in: number;
+  };
+  plans: AdminPlanStat[];
+  unassigned_plan: number;
+  watchlists: {
+    lists: number;
+    items: number;
+    users: number;
+  };
+  billing: {
+    paid: number;
+    pending: number;
+    failed: number;
+    revenue: number;
+  };
+  content: {
+    stocks: number;
+    recommendations: number;
+    latest_recommendation_date: string | null;
+    model_runs: number;
+    last_model_run: {
+      run_type: string;
+      status: string;
+      started_at: string | null;
+      finished_at: string | null;
+    } | null;
+  };
+}
+
 export interface ApiErrorShape {
   error?: string;
   message?: string;

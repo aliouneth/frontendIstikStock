@@ -1,6 +1,7 @@
 import { readToken } from "./session";
 import type {
   AccessResponse,
+  AdminStats,
   AdminUser,
   AuthResponse,
   AuthUser,
@@ -210,6 +211,10 @@ export function fetchPlans(): Promise<SubscriptionsResponse> {
 }
 
 /* ------------------------- administration ------------------------- */
+
+export function fetchAdminStats(): Promise<{ success: boolean; data: AdminStats }> {
+  return request("/api/admin/stats");
+}
 
 export interface AdminUserQuery {
   search?: string;

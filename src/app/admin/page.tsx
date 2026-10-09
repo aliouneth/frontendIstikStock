@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import StatsPanel from "@/components/admin/StatsPanel";
 import SubscriptionsPanel from "@/components/admin/SubscriptionsPanel";
 import UsersPanel from "@/components/admin/UsersPanel";
 import SiteLogo from "@/components/SiteLogo";
@@ -9,10 +10,10 @@ import { useAuth } from "@/components/AuthProvider";
 
 export default function AdminPage() {
   const { user, ready, isAdmin } = useAuth();
-  const [tab, setTab] = useState<"subscriptions" | "users">("subscriptions");
+  const [tab, setTab] = useState<"stats" | "subscriptions" | "users">("stats");
 
   useEffect(() => {
-    if (ready && user && !isAdmin) setTab("subscriptions");
+    if (ready && user && !isAdmin) setTab("stats");
   }, [ready, user, isAdmin]);
 
   if (!ready) {
@@ -65,7 +66,7 @@ export default function AdminPage() {
           <div>
             <h1 className="text-lg font-bold text-slate-900">Administration</h1>
             <p className="text-xs text-slate-500">
-              Manage subscriptions, the features they unlock, and user access.
+              Site stats, subscriptions, the features they unlock, and user access.
             </p>
           </div>
         </div>
@@ -80,6 +81,7 @@ export default function AdminPage() {
       <nav className="mt-6 flex w-fit rounded-xl border border-slate-200 bg-white p-1 text-sm shadow-sm">
         {(
           [
+            ["stats", "Site stats"],
             ["subscriptions", "Subscriptions"],
             ["users", "Users"],
           ] as const
@@ -97,7 +99,13 @@ export default function AdminPage() {
       </nav>
 
       <section className="mt-6">
-        {tab === "subscriptions" ? <SubscriptionsPanel /> : <UsersPanel />}
+        {tab === "stats" ? (
+          <StatsPanel />
+        ) : tab === "subscriptions" ? (
+          <SubscriptionsPanel />
+        ) : (
+          <UsersPanel />
+        )}
       </section>
     </main>
   );
