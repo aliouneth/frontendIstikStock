@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import SiteLogo from "@/components/SiteLogo";
+import StripePaymentForm from "@/components/checkout/StripePaymentForm";
 import { useAuth } from "@/components/AuthProvider";
 import {
   ApiError,
@@ -35,14 +36,19 @@ function when(iso: string | null) {
 export default function CheckoutPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const router = useRouter();
   const { plans, user, ready, isAdmin, refresh, featureLabels } = useAuth();
+  const [slug, setSlug] = useState("");
+
+  useEffect(() => {
+    params.then((p) => setSlug(p.slug));
+  }, [params]);
 
   const plan = useMemo(
-    () => plans.find((p) => p.slug === params.slug) ?? null,
-    [plans, params.slug]
+    () => (slug ? plans.find((p) => p.slug === slug) ?? null : null),
+    [plans, slug]
   );
 
   const [period, setPeriod] = useState<BillingPeriod>("monthly");
@@ -120,6 +126,54 @@ export default function CheckoutPage({
     }
   }
 
+  // Called by the Stripe Payment Element after Stripe confirms the payment. The
+  // server re-checks with Stripe before granting the plan.
+  async function finalizeStripePayment() {
+    if (!checkout) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await confirmCheckout(checkout.id);
+      setCheckout(res.checkout);
+      setStage("paid");
+      await refresh();
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "We could not finalise your payment.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // Finishing a 3-D Secure redirect: Stripe sends the user back to this page
+  // with the payment intent in the query string.
+  useEffect(() => {
+    const search = new URLSearchParams(window.location.search);
+    const checkoutId = search.get("checkout_id");
+    const intent = search.get("payment_intent");
+    if (!checkoutId || !intent) return;
+
+    const status = search.get("redirect_status");
+    window.history.replaceState({}, "", window.location.pathname);
+
+    if (status && status !== "succeeded") {
+      setError("Payment was not completed. You can try again.");
+      return;
+    }
+
+    void (async () => {
+      try {
+        const res = await confirmCheckout(Number(checkoutId));
+        setCheckout(res.checkout);
+        setStage("paid");
+        await refresh();
+      } catch (err) {
+        setError(err instanceof ApiError ? err.message : "We could not confirm your payment.");
+      }
+    })();
+    // Runs once on mount; refresh/confirmCheckout are stable enough here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   async function abandon() {
     if (checkout) {
       try {
@@ -152,7 +206,7 @@ export default function CheckoutPage({
           </p>
         </div>
         <Link
-          href={`/login?next=/checkout/${params.slug}`}
+          href={`/login?next=/checkout/${slug || ""}`}
           className="mt-6 rounded-xl bg-slate-900 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-slate-800"
         >
           Sign in
@@ -192,6 +246,7 @@ export default function CheckoutPage({
   }
 
   const collectsPayment = payment?.collects_payment ?? false;
+  const stripeReady = Boolean(collectsPayment && payment?.client_secret && checkout);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
@@ -324,14 +379,21 @@ export default function CheckoutPage({
                       "Your plan will be activated without a charge until Stripe is enabled."}
                   </p>
                 </div>
+              ) : stripeReady && payment?.client_secret && checkout ? (
+                <StripePaymentForm
+                  clientSecret={payment.client_secret}
+                  checkoutId={checkout.id}
+                  amountLabel={money(quote?.amount ?? 0, quote?.currency ?? plan.currency)}
+                  onPaid={finalizeStripePayment}
+                  onError={setError}
+                />
               ) : (
                 <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
                   <p className="text-xs font-semibold text-slate-700">
-                    Card details go here
+                    Preparing secure payment…
                   </p>
                   <p className="mt-1 text-[11px] text-slate-500">
-                    This is where the Stripe Payment Element mounts once the
-                    server-side driver is enabled.
+                    Waiting for the payment form to load.
                   </p>
                 </div>
               )}
@@ -353,17 +415,19 @@ export default function CheckoutPage({
                   </button>
                 ) : (
                   <>
-                    <button
-                      onClick={pay}
-                      disabled={busy}
-                      className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
-                    >
-                      {busy
-                        ? "Processing…"
-                        : collectsPayment
-                        ? `Pay ${money(quote?.amount ?? 0, quote?.currency ?? plan.currency)}`
-                        : "Confirm and activate"}
-                    </button>
+                    {!stripeReady && (
+                      <button
+                        onClick={pay}
+                        disabled={busy}
+                        className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
+                      >
+                        {busy
+                          ? "Processing…"
+                          : collectsPayment
+                          ? `Pay ${money(quote?.amount ?? 0, quote?.currency ?? plan.currency)}`
+                          : "Confirm and activate"}
+                      </button>
+                    )}
                     <button
                       onClick={abandon}
                       disabled={busy}

@@ -290,6 +290,9 @@ export interface PaymentIntent {
   collects_payment: boolean;
   label?: string;
   message?: string;
+  client_secret?: string | null;
+  publishable_key?: string | null;
+  recurring?: boolean;
 }
 
 export interface Quote {
