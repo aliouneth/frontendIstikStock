@@ -203,7 +203,8 @@ function TodayTable({
   showRationale: boolean;
 }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <>
+    <div className="hidden overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm md:block">
       <table className="w-full min-w-[760px] text-left text-sm">
         <thead>
           <tr className="border-b border-slate-200 bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
@@ -269,6 +270,70 @@ function TodayTable({
         </tbody>
       </table>
     </div>
+
+    <div className="grid gap-3 md:hidden">
+      {items.map((rec) => (
+        <article
+          key={rec.ticker}
+          className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-md bg-slate-900 px-1.5 py-0.5 font-mono text-[11px] text-white">
+                  #{rec.rank}
+                </span>
+                <span className="text-base font-bold text-slate-900">
+                  {rec.ticker}
+                </span>
+              </div>
+              <div className="mt-1 truncate text-xs text-slate-500">
+                {rec.name}
+              </div>
+              <div className="truncate text-[11px] text-slate-400">
+                {rec.sector}
+              </div>
+            </div>
+            <div className="shrink-0 text-right">
+              <div className="font-mono text-sm font-semibold tabular-nums text-slate-900">
+                {fmtPrice(rec.price_at_recommendation)}
+              </div>
+              <div className={`font-mono text-sm tabular-nums ${pctClass(rec.performance.last_pct)}`}>
+                {fmtPct(rec.performance.last_pct)}
+              </div>
+              <div className="text-[10px] text-slate-400">
+                {rec.performance.days_tracked > 0
+                  ? `${rec.performance.days_tracked}d tracked`
+                  : "no data"}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-3">
+            <ScoreBar score={rec.score} />
+          </div>
+
+          <p className="mt-3 text-xs leading-relaxed text-slate-500">
+            {rec.rationale}
+            {rec.rationale_locked && (
+              <span className="ml-1 inline-block" title="Upgrade for full rationale">
+                🔒
+              </span>
+            )}
+          </p>
+          <RiskBadges risks={rec.risks} />
+
+          <div className="mt-3">
+            {showRationale ? (
+              <FeatureChips features={rec.key_features} />
+            ) : (
+              <LockedBadge feature="full_rationale" />
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+    </>
   );
 }
 
