@@ -121,21 +121,27 @@ export default function RegisterPage() {
           </div>
         )}
 
+        <p className="mt-2 text-center text-[11px] leading-relaxed text-slate-500">
+          By registering, you acknowledge that you fully understand that IstikStocks is an AI research prototype.
+          Model scores are estimates of forward returns derived from historical pattern learning — not financial advice.
+          Penny stocks are highly volatile and illiquid.
+        </p>
+
         <button
           type="submit"
-          disabled={busy}
-          className="w-full rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50"
+          disabled={busy || !defaultPlan}
+          className="w-full rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-50"
         >
           {busy ? "Creating account…" : "Create account"}
         </button>
-      </form>
 
-      <p className="mt-4 text-center text-sm text-slate-500">
-        Already registered?{" "}
-        <Link href="/login" className="font-semibold text-sky-700 hover:underline">
-          Sign in
-        </Link>
-      </p>
+        <p className="text-center text-xs text-slate-500">
+          Already have an account?{" "}
+          <Link href="/login" className="font-semibold text-slate-800 hover:underline">
+            Sign in
+          </Link>
+        </p>
+      </form>
     </main>
   );
 }

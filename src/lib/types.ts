@@ -24,6 +24,12 @@ export interface Performance {
   }[];
 }
 
+export interface RiskFlag {
+  code: string;
+  label: string;
+  detail: string;
+}
+
 export interface Recommendation {
   rank: number;
   ticker: string;
@@ -34,6 +40,7 @@ export interface Recommendation {
   rationale: string;
   rationale_locked?: boolean;
   key_features: Record<string, number>;
+  risks?: RiskFlag[];
   performance: Performance;
 }
 
@@ -80,6 +87,7 @@ export interface RunPick {
   score: number;
   rationale: string;
   key_features: Record<string, number>;
+  risks?: RiskFlag[];
 }
 
 export interface NewsHeadline {
@@ -232,6 +240,7 @@ export interface StockEvaluationEligible extends StockEvaluationBase {
     raw: number;
     rationale: string;
     key_features: Record<string, number>;
+    risks?: RiskFlag[];
   };
 }
 

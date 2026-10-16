@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import HistoryCharts from "@/components/HistoryCharts";
+import RiskBadges from "@/components/RiskBadges";
 import AccountBar from "@/components/AccountBar";
 import SiteLogo from "@/components/SiteLogo";
 import { LockedBadge, LockedPanel } from "@/components/Locked";
@@ -180,7 +181,7 @@ function ModelChip({
   return (
     <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
       <span className="rounded-full border border-sky-300 bg-sky-50 px-3 py-1 font-mono text-sky-700">
-        model {model.version}
+        IstikStock model
       </span>
       <span>trained {model.trained_at?.slice(0, 10)}</span>
       {showMetrics && holdout?.spearman !== undefined && (
@@ -203,12 +204,11 @@ function TodayTable({
 }) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <table className="w-full min-w-[860px] text-left text-sm">
+      <table className="w-full min-w-[760px] text-left text-sm">
         <thead>
           <tr className="border-b border-slate-200 bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
             <th className="px-4 py-3">#</th>
             <th className="px-4 py-3">Ticker</th>
-            <th className="px-4 py-3">Sector</th>
             <th className="px-4 py-3 text-right">Price</th>
             <th className="px-4 py-3">Model score</th>
             <th className="px-4 py-3">Since rec.</th>
@@ -216,7 +216,7 @@ function TodayTable({
             <th className="px-4 py-3">Key drivers</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="[&_td]:align-top">
           {items.map((rec) => (
             <tr
               key={rec.ticker}
@@ -228,8 +228,10 @@ function TodayTable({
                 <div className="max-w-[160px] truncate text-xs text-slate-500">
                   {rec.name}
                 </div>
+                <div className="max-w-[160px] truncate text-[11px] text-slate-400">
+                  {rec.sector}
+                </div>
               </td>
-              <td className="px-4 py-3 text-slate-600">{rec.sector}</td>
               <td className="px-4 py-3 text-right font-mono tabular-nums text-slate-900">
                 {fmtPrice(rec.price_at_recommendation)}
               </td>
@@ -253,6 +255,7 @@ function TodayTable({
                     🔒
                   </span>
                 )}
+                <RiskBadges risks={rec.risks} />
               </td>
               <td className="px-4 py-3">
                 {showRationale ? (
@@ -521,6 +524,7 @@ function HistoryList({
                   {rec.rationale}
                   {rec.rationale_locked ? " 🔒" : ""}
                 </p>
+                <RiskBadges risks={rec.risks} />
                 {showRationale && Object.keys(rec.key_features).length > 0 && (
                   <div className="mt-2">
                     <FeatureChips features={rec.key_features} />
@@ -816,18 +820,13 @@ export default function Home() {
             </div>
           ) : today && today.items.length > 0 ? (
             <>
-              <div className="mb-3 flex items-baseline justify-between gap-3">
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-900">
-                    Top 5 for {todayLabel || fmtDate(today.date)}
-                  </h2>
-                  <p className="text-[11px] text-slate-400">
-                    picks as of {fmtDate(today.date)}
-                  </p>
-                </div>
-                <span className="font-mono text-xs text-slate-500">
-                  {today.model_version}
-                </span>
+              <div className="mb-3">
+                <h2 className="text-lg font-semibold text-slate-900">
+                  Top 5 for {todayLabel || fmtDate(today.date)}
+                </h2>
+                <p className="text-[11px] text-slate-400">
+                  picks as of {fmtDate(today.date)}
+                </p>
               </div>
               <TodayTable items={today.items} showRationale={showRationale} />
             </>
@@ -996,6 +995,36 @@ export default function Home() {
               </Link>
             );
           })}
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-5 text-xs leading-relaxed text-slate-600 shadow-sm">
+          <h3 className="text-sm font-semibold text-slate-900">
+            Subscription and billing policy
+          </h3>
+          <p className="mt-2">
+            IstikStock operates on a paid subscription model. Monthly plans renew
+            each month until you cancel, and annual plans renew each year until
+            canceled. All payments are handled securely through Stripe, and
+            IstikStock never stores full credit card details.
+          </p>
+          <p className="mt-2">
+            Users can manage or cancel their subscription from their account
+            dashboard when available. Canceling a plan stops future renewals, and
+            subscription access typically remains active through the end of the
+            current paid billing period.
+          </p>
+          <p className="mt-2">
+            Subscription fees are generally non-refundable once a billing cycle
+            begins, unless required by law or expressly approved in writing by
+            IstikStock. For billing assistance, contact{" "}
+            <a
+              href="mailto:contact@istikstock.com"
+              className="font-semibold text-sky-700 hover:underline"
+            >
+              contact@istikstock.com
+            </a>
+            .
+          </p>
         </div>
       </section>
     </main>

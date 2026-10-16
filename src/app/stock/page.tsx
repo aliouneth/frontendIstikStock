@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import SiteLogo from "@/components/SiteLogo";
+import RiskBadges from "@/components/RiskBadges";
 import AccountBar from "@/components/AccountBar";
 import { LockedPanel } from "@/components/Locked";
 import { useAuth } from "@/components/AuthProvider";
@@ -193,7 +194,7 @@ function RankedEvaluation({
           <ScoreBar score={item.score} />
           <div className="mt-1.5 flex justify-between text-[11px] text-slate-400">
             <span>last close {fmtPrice(item.price)}</span>
-            <span>model {evaluation.model_version}</span>
+            <span>IstikStock model</span>
           </div>
         </div>
       </div>
@@ -214,6 +215,7 @@ function RankedEvaluation({
         <p className="mt-2 text-sm leading-relaxed text-slate-700">
           {item.rationale}
         </p>
+        <RiskBadges risks={item.risks} />
         {Object.keys(item.key_features).length > 0 && (
           <div className="mt-4">
             <div className="mb-2 text-[11px] uppercase tracking-wide text-slate-400">
